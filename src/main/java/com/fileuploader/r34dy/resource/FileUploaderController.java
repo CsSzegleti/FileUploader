@@ -35,7 +35,7 @@ public class FileUploaderController {
                                  @RequestPart("metadata") HashMap<String,String> metadata) throws IOException {
         String fileName = fileService.saveToTmpLocation(file);
 
-        fileService.checkfile(fileName);
+        fileService.checkFile(fileName);
 
         fileService.moveToPermanentLocation(fileName);
 

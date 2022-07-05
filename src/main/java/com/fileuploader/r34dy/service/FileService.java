@@ -30,7 +30,7 @@ public class FileService {
         return f.getName();
     }
 
-    public void checkfile(String fileName) {
+    public void checkFile(String fileName) {
         /// TODO: check
         // calls private check steps
     }
