@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -41,12 +41,16 @@ public class FileUploaderController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE})
     public HttpStatus uploadFile(@RequestPart("file") MultipartFile file,
+                                 @RequestPart("metadata") Map<String,String> metadata) throws IOException {
+        String fileName = fileService.saveToTmpLocation(file);
                                  @RequestPart("metadata") HashMap<String,String> metadata) throws IOException, SecurityConstraintException {
         String fileName = fileHandlerService.saveToTmpLocation(file);
 
         fileSecurityService.checkFile(new File(URI.create(String.format("%s%s",tmpFolderName, fileName))));
 
         fileHandlerService.moveToPermanentLocation(fileName);
+
+        fileService.additionalData(metadata, file);
 
         rabbitTemplate.convertAndSend(queueName, metadata);
 

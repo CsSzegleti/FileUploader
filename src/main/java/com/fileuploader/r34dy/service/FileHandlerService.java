@@ -12,10 +12,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
+import java.util.Date;
+import java.util.Map;
 
 @Service
 @Slf4j
 public class FileHandlerService {
+
+    private final String UPLOAD_TIME = "UPLOAD_TIME";
+            private final String CONTENT_TYPE = "CONTENT_TYPE";
 
     @Value("${file.tmp.folder-uri}")
     private String tmpFolderUri;
@@ -44,4 +49,12 @@ public class FileHandlerService {
     }
 
 
+
+    public void additionalData(Map<String, String> metadata, MultipartFile file) {
+        metadata.put(UPLOAD_TIME, new Date(System.currentTimeMillis()).toString());
+        metadata.put(CONTENT_TYPE, file.getContentType());
+    }
 }
+
+// https://www.baeldung.com/spring-security-csrf
+// If our stateless API uses token-based authentication, such as JWT, we don't need CSRF protection, and we must disable it as we saw earlier.
